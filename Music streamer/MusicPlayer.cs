@@ -58,7 +58,7 @@ namespace Music_streamer
                 do
                 {
                     queue.TryDequeue(out file);
-                    Thread.Sleep(5);
+                    Thread.Sleep(2);
                 } while (file == null);
                 file.Open();
                 Mp3Frame frame = file.GetFrame();
@@ -77,9 +77,7 @@ namespace Music_streamer
                             Disattach(output);
                         }
                     }
-                    var byterate = frame.BitRate / 8;
-                    var ms = frame.FrameLength * 1000 / byterate;
-                    Thread.Sleep(Math.Max(0, ms-5));
+                    
                     frame = file.GetFrame();
 
                     if (OnStatusUpdate != null)
@@ -94,7 +92,7 @@ namespace Music_streamer
 
                     while (Pause)
                     {
-                        Thread.Sleep(10);
+                        Thread.Sleep(2);
                     }
                 }
             }
