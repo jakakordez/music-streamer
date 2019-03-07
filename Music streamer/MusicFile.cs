@@ -25,7 +25,6 @@ namespace Music_streamer
             Filename = filename;
 
             tfile = File.Create(filename);
-            //tfile.Properties.Duration
         }
 
         public string Title => tfile.Tag.Title;
@@ -46,6 +45,7 @@ namespace Music_streamer
                 Thread.Sleep(1);
             }
             var frame = reader.ReadNextFrame();
+            if (frame == null) return frame;
             duration += FrameDuration(frame);
             return frame;
         }

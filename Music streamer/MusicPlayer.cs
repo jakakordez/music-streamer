@@ -16,11 +16,12 @@ namespace Music_streamer
         public struct MusicPlayerStatus
         {
             public MusicFile CurrentFile;
-            public int Bitrate, Connections;
+            public int Connections;
             public List<MusicFile> Queue;
         }
 
         public event Func<MusicPlayerStatus, object> OnStatusUpdate;
+        public event Func<List<MusicFile>, object> OnFileListUpdate;
 
         ConcurrentQueue<MusicFile> queue = new ConcurrentQueue<MusicFile>();
         Thread playerThread;
@@ -38,6 +39,7 @@ namespace Music_streamer
         public void EnqueueMusic(MusicFile file)
         {
             queue.Enqueue(file);
+            if (OnFileListUpdate != null) OnFileListUpdate.Invoke(queue.ToList());
         }
 
         public void Attach(Stream outputStream)
@@ -60,6 +62,7 @@ namespace Music_streamer
                     queue.TryDequeue(out file);
                     Thread.Sleep(2);
                 } while (file == null);
+                if (OnFileListUpdate != null) OnFileListUpdate.Invoke(queue.ToList());
                 file.Open();
                 Mp3Frame frame = file.GetFrame();
                 while (frame != null)

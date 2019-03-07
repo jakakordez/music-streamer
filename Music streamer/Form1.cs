@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -25,6 +26,16 @@ namespace Music_streamer
         private void Form1_Load(object sender, EventArgs e)
         {
             streamer.Player.OnStatusUpdate += Player_OnStatusUpdate;
+            streamer.Player.OnFileListUpdate += Player_OnFileListUpdate;
+        }
+
+        private object Player_OnFileListUpdate(List<MusicFile> queue)
+        {
+            Invoke(new Action(() =>
+            {
+                lstQueue.DataSource = queue;
+            }));
+            return null;
         }
 
         private object Player_OnStatusUpdate(MusicPlayer.MusicPlayerStatus arg)
@@ -33,7 +44,6 @@ namespace Music_streamer
                 lblTitle.Text = arg.CurrentFile.Title;
                 lblArtist.Text = arg.CurrentFile.Artist;
                 lblClients.Text = string.Format("Clients: {0}", arg.Connections);
-                lstQueue.DataSource = arg.Queue;
             }));
             return null;
         }
@@ -46,7 +56,7 @@ namespace Music_streamer
                 foreach (var filename in filenames)
                 {
                     var file = new MusicFile(filename);
-                    var item = new ListViewItem(file.ToString());
+                    var item = new ListViewItem(new string[] { file.Title, file.Artist, file.Filename });
                     item.Tag = file;
                     lstFiles.Items.Add(item);
                 }
@@ -58,6 +68,22 @@ namespace Music_streamer
             if(lstFiles.SelectedItems.Count > 0)
             {
                 streamer.Player.EnqueueMusic((MusicFile)lstFiles.SelectedItems[0].Tag);
+            }
+        }
+
+        private void lstQueue_DragEnter(object sender, DragEventArgs e)
+        {
+            e.Effect = DragDropEffects.Link;
+        }
+
+        private void lstQueue_DragDrop(object sender, DragEventArgs e)
+        {
+            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop, false);
+            foreach (var filename in files)
+            {
+                if (!filename.EndsWith(".mp3")) continue;
+                var file = new MusicFile(filename);
+                streamer.Player.EnqueueMusic(file);
             }
         }
     }
