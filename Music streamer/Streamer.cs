@@ -19,7 +19,7 @@ namespace Music_streamer
             Player.Start();
 
             var listener = new HttpListener();
-            listener.Prefixes.Add("http://localhost:" + port + "/");
+            listener.Prefixes.Add("http://*:" + port + "/");
             listener.Start();
             Task.Run(()=>{
                 while (true)

@@ -16,15 +16,28 @@ namespace Music_streamer
 {
     public partial class Form1 : Form
     {
-        Streamer streamer = new Streamer(2000);
+        Streamer streamer;
 
         public Form1()
         {
             InitializeComponent();
+            
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            try
+            {
+                streamer = new Streamer(2000);
+            }
+            catch
+            {
+                MessageBox.Show(
+                    "Binding the port TCP 2000 is denied. Check your firewall, other programs or try to run as administrator.",
+                    "Access denied", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Environment.Exit(-1);
+                return;
+            }
             streamer.Player.OnStatusUpdate += Player_OnStatusUpdate;
             streamer.Player.OnFileListUpdate += Player_OnFileListUpdate;
         }
