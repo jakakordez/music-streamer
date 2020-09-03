@@ -7,19 +7,19 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Music_streamer
+namespace Streamer
 {
-    class Streamer
+    public class MusicStreamer
     {
         public MusicPlayer Player;
 
-        public Streamer(int port)
+        public MusicStreamer(int port)
         {
             Player = new MusicPlayer();
             Player.Start();
 
             var listener = new HttpListener();
-            listener.Prefixes.Add("http://*:" + port + "/");
+            listener.Prefixes.Add("http://localhost:" + port + "/");
             listener.Start();
             Task.Run(()=>{
                 while (true)

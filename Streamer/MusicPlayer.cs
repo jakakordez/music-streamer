@@ -9,9 +9,9 @@ using System.Diagnostics;
 using System.Collections.Concurrent;
 using System.Threading;
 
-namespace Music_streamer
+namespace Streamer
 {
-    class MusicPlayer
+    public class MusicPlayer
     {
         public struct MusicPlayerStatus
         {
@@ -26,10 +26,12 @@ namespace Music_streamer
         ConcurrentQueue<MusicFile> queue = new ConcurrentQueue<MusicFile>();
         Thread playerThread;
         ConcurrentDictionary<Stream, DateTime> outputStreams;
+        ConcurrentDictionary<BinaryWriter, CancellationTokenSource> outputWriters;
 
         public void Start()
         {
             outputStreams = new ConcurrentDictionary<Stream, DateTime>();
+            outputWriters = new ConcurrentDictionary<BinaryWriter, CancellationTokenSource>();
             playerThread = new Thread(new ThreadStart(PlayerThread));
             playerThread.Start();
         }
@@ -47,9 +49,22 @@ namespace Music_streamer
             outputStreams.TryAdd(outputStream, DateTime.Now);
         }
 
+        public CancellationToken Attach(BinaryWriter writer)
+        {
+            var cts = new CancellationTokenSource();
+            outputWriters.TryAdd(writer, cts);
+            return cts.Token;
+        }
+
         public void Disattach(Stream outputStream)
         {
             outputStreams.TryRemove(outputStream, out DateTime value);
+        }
+
+        public void Disattach(BinaryWriter writer)
+        {
+            outputWriters.TryRemove(writer, out CancellationTokenSource token);
+            token.Cancel();
         }
 
         void PlayerThread()
@@ -80,7 +95,23 @@ namespace Music_streamer
                             Disattach(output);
                         }
                     }
-                    
+
+                    foreach (BinaryWriter writer in outputWriters.Keys)
+                    {
+                        try
+                        {
+                            
+                            writer.Write(frame.RawData);
+                            //writer.Write(frame.RawData, 0, frame.RawData.Length);
+                            writer.Flush();
+                        }
+                        catch(Exception e)
+                        {
+                            writer.Close();
+                            Disattach(writer);
+                        }
+                    }
+
                     frame = file.GetFrame();
 
                     if (OnStatusUpdate != null)

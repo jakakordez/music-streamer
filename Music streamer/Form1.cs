@@ -11,12 +11,14 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Streamer;
 
 namespace Music_streamer
 {
     public partial class Form1 : Form
     {
-        Streamer streamer;
+        MusicStreamer streamer;
+        MusicCollection collection;
 
         public Form1()
         {
@@ -28,7 +30,8 @@ namespace Music_streamer
         {
             try
             {
-                streamer = new Streamer(2000);
+                streamer = new MusicStreamer(2000);
+                collection = new MusicCollection();
             }
             catch
             {
@@ -65,10 +68,10 @@ namespace Music_streamer
         {
             if(fbdOpen.ShowDialog() == DialogResult.OK)
             {
-                var filenames = Directory.GetFiles(fbdOpen.SelectedPath, "*.mp3");
-                foreach (var filename in filenames)
+                var source = new LocalSource("Local", fbdOpen.SelectedPath);
+                collection.AddSource(source);
+                foreach (var file in source.ListFiles())
                 {
-                    var file = new MusicFile(filename);
                     var item = new ListViewItem(new string[] { file.Title, file.Artist, file.Filename });
                     item.Tag = file;
                     lstFiles.Items.Add(item);
@@ -95,7 +98,7 @@ namespace Music_streamer
             foreach (var filename in files)
             {
                 if (!filename.EndsWith(".mp3")) continue;
-                var file = new MusicFile(filename);
+                var file = new LocalFile(new LocalSource("", ""), filename);
                 streamer.Player.EnqueueMusic(file);
             }
         }

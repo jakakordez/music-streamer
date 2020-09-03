@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NAudio" Version="1.10.0" />
+    <PackageReference Include="NLayer" Version="1.13.0" />
+    <PackageReference Include="NLayer.NAudioSupport" Version="1.1.0" />
+    <PackageReference Include="SharpCifs.Std" Version="0.2.13" />
+    <PackageReference Include="taglib" Version="2.1.0" />
+  </ItemGroup>
+
+</Project>

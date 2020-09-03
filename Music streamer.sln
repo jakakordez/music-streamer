@@ -1,9 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28010.2046
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30413.136
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Music streamer", "Music streamer\Music streamer.csproj", "{F1FBFA0E-A081-4E50-BA70-CC8C17B55905}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Streaming server", "Streaming server\Streaming server.csproj", "{5D51CFCE-BC29-4862-B240-704D8FC48FF1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Streamer", "Streamer\Streamer.csproj", "{F1B8F9A5-936D-4A8C-9B42-8A52904C099A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{F1FBFA0E-A081-4E50-BA70-CC8C17B55905}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F1FBFA0E-A081-4E50-BA70-CC8C17B55905}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F1FBFA0E-A081-4E50-BA70-CC8C17B55905}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D51CFCE-BC29-4862-B240-704D8FC48FF1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D51CFCE-BC29-4862-B240-704D8FC48FF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D51CFCE-BC29-4862-B240-704D8FC48FF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D51CFCE-BC29-4862-B240-704D8FC48FF1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1B8F9A5-936D-4A8C-9B42-8A52904C099A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1B8F9A5-936D-4A8C-9B42-8A52904C099A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1B8F9A5-936D-4A8C-9B42-8A52904C099A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1B8F9A5-936D-4A8C-9B42-8A52904C099A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
